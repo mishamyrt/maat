@@ -30,6 +30,12 @@ body {
     line-height: 15px;
 }
 
+.note blockquote {
+    margin: 0 0 10px;
+    padding-left: 30px;
+    max-width: 760px
+}
+
 .note p {
     margin: 0 0 10px;
     max-width: 720px;
