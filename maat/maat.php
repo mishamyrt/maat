@@ -16,9 +16,9 @@ class Maat
     "/<br><\/p>/" => "</p>", //paragraph fix
     "/\*\*([^\*]*)\*\*/" => "<b>$1</b>", //bold
     "/\/\/([^\/*]*)\/\//" => "<i>$1</i>", //italic
-    "/<p>>(.*)<\/p>/" => '<blockquote>$1</blockquote>',
-    "/<p># (.*)<\/p>/" => '<h2>$1</h2>',
-    "/<p>## (.*)<\/p>/" => '<h3>$1</h3>'
+    "/<p>>(.*)<\/p>/" => '<blockquote>$1</blockquote>', //blockquote
+    "/<p># (.*)<\/p>/" => '<h2>$1</h2>', //h2
+    "/<p>## (.*)<\/p>/" => '<h3>$1</h3>' //h3
     );
     function __construct()
     {
@@ -51,6 +51,7 @@ class Maat
     }
     public function render($text)
     {
+        $text .= "\n";
         $lines = explode("\n", $text);
         $isHeader = false;
         $isList = false;
