@@ -5,15 +5,20 @@ body {
 }
 
 .video-container {
-    max-width: 1200px;
+    width: 1200px;
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+.video-wrapper {
+    width: 100%;
     position: relative;
-    margin-bottom: 18px;
     padding-bottom: 56.25%;
-    height: 0;
 }
 
 .video-container iframe {
     position: absolute;
+    max-height: 675px;
     top: 0;
     left: 0;
     width: 100%;
