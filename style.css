@@ -83,3 +83,13 @@ body {
 .img-wrapper {
     position: relative;
 }
+
+.hipster-quote {
+    border: 5px solid #da570f;
+    max-width: 720px;
+    padding: 28px 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 28px;
+}
