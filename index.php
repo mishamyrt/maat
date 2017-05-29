@@ -4,9 +4,10 @@ error_reporting (E_ALL);
 ini_set('display_errors', 1);
 error_reporting(~0);
 
-function stopwatch () {
-  list ($usec, $sec) = explode (' ', microtime ());
-  return ((float) $usec + (float) $sec);
+function stopwatch()
+{
+    list ($usec, $sec) = explode (' ', microtime ());
+    return ((float) $usec + (float) $sec);
 }
 ?>
 
@@ -57,30 +58,32 @@ function stopwatch () {
   </head>
   <body>
 <?php
-    if (!include 'maat/maat.php') die ('maat init failed');
+if (!include 'maat/maat.php') {
+    die ('maat init failed');
+}
     $files = glob('tests/*.{txt}', GLOB_BRACE);
-    foreach($files as $file) {
+foreach ($files as $file) {
 ?>
 <div class="note">
-  <?php
-  $Mt = new Maat;
-  $testName = basename($file, ".txt");
-  echo "<h2>".$testName."</h2>";
+<?php
+$Mt = new Maat;
+$testName = basename($file, ".txt");
+echo "<h2>".$testName."</h2>";
 ?>
-  <div class="content">
-    <?php
-  $note = file_get_contents($file);
-  $stopwatch = stopwatch();
-  echo $Mt->render($note);
-     ?>
-  </div>
-  <div class="info">
-    Execution time:
-    <?php
-echo stopwatch() - $stopwatch;
-     ?>
-  </div>
+<div class="content">
+<?php
+$note = file_get_contents($file);
+$stopwatch = stopwatch();
+echo $Mt->render($note);
+?>
 </div>
-<?php } ?>
+<div class="info">
+Execution time:
+<?php
+echo stopwatch() - $stopwatch;
+?>
+</div>
+</div>
+<?php     } ?>
   </body>
 </html>
