@@ -57,8 +57,8 @@ class Maat
         $isList = false;
         $line = '';
         for ($i=0; $i < count($lines); $i++) {
-            if ($lines[$i] !== '') {
-                $line .= '<br>'.$lines[$i];
+            if (trim($lines[$i]) !== '') {
+                $line .= '<br>'.trim($lines[$i]);
             } else {
                 $line = '<p>'.$line.'</p>';
                 if (!$isHeader && !$isList) {
