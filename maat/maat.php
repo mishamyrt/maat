@@ -29,7 +29,7 @@ class Maat
             $this->load_extension($extension);
         }
     }
-    function load_extension($file)
+    private function load_extension($file)
     {
         $name = basename ($file);
         $name = basename($file, ".php");
@@ -41,7 +41,7 @@ class Maat
         );
         return true;
     }
-    function group_render($line)
+    private function group_render($line)
     {
         $render = $line;
         foreach ($this->extensions as $extension) {
