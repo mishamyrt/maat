@@ -1,0 +1,12 @@
+Тест блока с кодом
+
+<code>
+<div class="fuckyeah">
+</div>
+</code>
+
+<code>
+{{@true}}
+asda
+{{end}}
+</code>
