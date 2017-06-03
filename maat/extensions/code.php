@@ -6,7 +6,6 @@ class MaatGroup_code implements MaatGroup
         $renderedContent = $content;
         preg_match("/<p><code>(.*)<\/code><\/p>/", $content, $quote);
         if ($quote) {
-            // echo $quote[1];
             $code = htmlspecialchars(str_replace('<br>', "nneewwlliinnee", $quote[1]));
             $code = substr(str_replace("nneewwlliinnee", '<br>'."\n", $code), 5);
             $code = substr($code, 0, -5);

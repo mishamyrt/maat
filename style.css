@@ -70,6 +70,12 @@ body {
     margin: 26px 0 10px 0;
 }
 
+.note table td {
+    vertical-align: top;
+    text-align: left;
+    padding: 0 15px 0 0;
+}
+
 .note {
     margin-bottom: 70px;
     margin-left: 8%;
