@@ -1,0 +1,10 @@
+Тест ХТМЛ
+
+<html>
+<a id="link" href="asd">//Ссылка//</a>
+<style>
+#link{
+    color: #f00;
+}
+</style>
+</html>

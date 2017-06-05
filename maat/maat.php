@@ -53,21 +53,32 @@ class Maat
     {
         $text .= "\n";
         $lines = explode("\n", $text);
+        $isHTML = false;
         $line = '';
         for ($i=0; $i < count($lines); $i++) {
             $trimedLine = trim($lines[$i]);
             switch ($trimedLine){
+                case '<html>':
+                    $isHTML = true;
+                    $line = $trimedLine."\n";
+                    break;
                 case '':
-                    $line = '<p>'.$line.'</p>';
-                    $patterns = array_keys($this->dict);
-                    $values = array_values($this->dict);
-                    $line = str_replace($line, preg_replace($patterns, $values, $line), $line);
-                    $line = $this->group_render($line);
+                    if ($isHTML) $isHTML = false;
+                    else {
+                        $line = '<p>'.$line.'</p>';
+                        $patterns = array_keys($this->dict);
+                        $values = array_values($this->dict);
+                        $line = str_replace($line, preg_replace($patterns, $values, $line), $line);
+                        $line = $this->group_render($line);
+                    }
                     $this->content[] = $line;
                     $line = '';
                     break;
                 default:
-                    $line .= '<br>'.$trimedLine;
+                    if ($isHTML) 
+                        $line .= $trimedLine."\n";
+                    else
+                        $line .= '<br>'.$trimedLine;
                     break;
             }
         }
