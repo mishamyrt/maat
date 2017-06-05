@@ -12,8 +12,6 @@ class Maat
     "/\(\(([^\(\)]*) ([^\(\)]*)\)\)/" => '<a href="$1">$2</a>',
     "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(\s)/" => '<a href="$1">$1</a> ',
     "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(<)/" => '<a href="$1">$1</a><',
-    "/<p><br>/" => "<p>", //paragraph fix
-    "/<br><\/p>/" => "</p>", //paragraph fix
     "/\*\*([^\*]*)\*\*/" => "<b>$1</b>", //bold
     "/\/\/([^\/*]*)\/\//" => "<i>$1</i>", //italic
     "/<p>>(.*)<\/p>/" => '<blockquote><p>$1</p></blockquote>', //blockquote
@@ -77,8 +75,12 @@ class Maat
                 default:
                     if ($isHTML) 
                         $line .= $trimedLine."\n";
-                    else
-                        $line .= '<br>'.$trimedLine;
+                    else {
+                        if ($line == '')
+                            $line .= $trimedLine;
+                        else
+                            $line .= '<br>'.$trimedLine;
+                    }
                     break;
             }
         }
