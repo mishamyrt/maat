@@ -49,7 +49,7 @@ class Maat
         $needFormating = true;
         foreach ($this->extensions as $extension) {
             $render = $extension['instance']->render($line, $this->config);
-            if ($render[0] != $line){
+            if (strlen($render[0]) != strlen($line)){
                 $needFormating = $render[1];
                 $flag = true;
                 break;
@@ -65,7 +65,7 @@ class Maat
         $lineValues = array_values($this->lineDict);
         $isHTML = false;
         $line = '';
-        for ($i=0; $i < count($lines); $i++) {
+        for ($i=0; $i < sizeof($lines); $i++) {
             $trimedLine = trim($lines[$i]);
             switch ($trimedLine){
                 case '<html>':
