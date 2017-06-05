@@ -53,22 +53,22 @@ class Maat
     {
         $text .= "\n";
         $lines = explode("\n", $text);
-        $isHeader = false;
-        $isList = false;
         $line = '';
         for ($i=0; $i < count($lines); $i++) {
-            if (trim($lines[$i]) !== '') {
-                $line .= '<br>'.trim($lines[$i]);
-            } else {
-                $line = '<p>'.$line.'</p>';
-                if (!$isHeader && !$isList) {
+            $trimedLine = trim($lines[$i]);
+            switch ($trimedLine){
+                case '':
+                    $line = '<p>'.$line.'</p>';
                     $patterns = array_keys($this->dict);
                     $values = array_values($this->dict);
                     $line = str_replace($line, preg_replace($patterns, $values, $line), $line);
                     $line = $this->group_render($line);
-                }
-                $this->content[] = $line;
-                $line = '';
+                    $this->content[] = $line;
+                    $line = '';
+                    break;
+                default:
+                    $line .= '<br>'.$trimedLine;
+                    break;
             }
         }
         $renderedContent = implode($this->content, "\n");
