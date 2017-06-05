@@ -4,7 +4,7 @@ class MaatGroup_table implements MaatGroup
     function render($content, $config)
     {
         $renderedContent = $content;
-        preg_match("/<p>-{5}<br>(.*)<br>-{5}<\/p>/", $content, $tableString);
+        preg_match("/-{5}<br>(.*)<br>-{5}/", $content, $tableString);
         if ($tableString) {
             $renderedContent = '<table>'."\n";
            $tableLines = explode('<br>', $tableString[1]);
@@ -32,8 +32,7 @@ class MaatGroup_table implements MaatGroup
             $renderedContent .= '</tr>'."\n";
            }
            $renderedContent .= '</table>'."\n";
-        //    var_dump($renderedContent);
         }
-        return $renderedContent;
+        return array($renderedContent, true);
     }
 }

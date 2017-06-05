@@ -4,7 +4,7 @@ class MaatGroup_list implements MaatGroup
     function render($content, $config)
     {
         $renderedContent = $content;
-        preg_match("/<p>\*(.*)<br>\*/", $content, $list);
+        preg_match("/\*(.*)<br>\*/", $content, $list);
         if ($list) {
             $renderedContent = str_replace('</p>', '', str_replace('<p>', '', $renderedContent));
             $list = explode('<br>* ', $renderedContent);
@@ -15,7 +15,7 @@ class MaatGroup_list implements MaatGroup
             }
             $renderedContent .= '</ul>';
         } else {
-            preg_match("/<p>1\.(.*)<br>1\./", $content, $list);
+            preg_match("/1\.(.*)<br>1\./", $content, $list);
             if ($list) {
                 $renderedContent = str_replace('</p>', '', str_replace('<p>', '', $renderedContent));
                 $list = explode('<br>1. ', $renderedContent);
@@ -27,6 +27,6 @@ class MaatGroup_list implements MaatGroup
                 $renderedContent .= '</ol>';
             }
         }
-        return $renderedContent;
+        return array($renderedContent, true);
     }
 }

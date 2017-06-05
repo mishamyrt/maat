@@ -6,21 +6,22 @@ class MaatGroup_image implements MaatGroup
     {
         $this->config = $config;
         $renderedContent = $content;
-        preg_match("/<p>(.*).(jpe?g|gif|png)<\/p>/", $content, $img);
+        preg_match("/(.*).(jpe?g|gif|png)([^<]*)<br>([^<]*)/", $content, $img);
         if ($img) {
-            return $this->getImage($img, false, false);
-        } else {
-            preg_match("/<p>(.*).(jpe?g|gif|png)([^<]*)<\/p>/", $content, $img);
+            $renderedContent = $this->getImage($img, true, true);
+        }
+        else {
+            preg_match("/(.*).(jpe?g|gif|png)([^<]*)/", $content, $img);
             if ($img) {
-                return $this->getImage($img, true, false);
+                $renderedContent = $this->getImage($img, true, false);
             } else {
-                preg_match("/<p>(.*).(jpe?g|gif|png)([^<]*)<br>([^<]*)<\/p>/", $content, $img);
+                preg_match("/(.*).(jpe?g|gif|png)/", $content, $img);
                 if ($img) {
-                    return $this->getImage($img, true, true);
+                    $renderedContent = $this->getImage($img, false, false);
                 }
             }
         }
-        return $renderedContent;
+        return array($renderedContent, false);
     }
     function getImage($img, $alt, $description)
     {

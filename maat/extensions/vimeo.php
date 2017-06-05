@@ -4,7 +4,7 @@ class MaatGroup_vimeo implements MaatGroup
     function render($content, $config)
     {
         $video = $content;
-        preg_match("/<p><a href=\".*vimeo\.com\/.*\">.*vimeo\.com\/(.*)<\/a><\/p>/", $content, $vimeo);
+        preg_match("/.*vimeo\.com\/(.*)/", $content, $vimeo);
         if ($vimeo) {
             $dir = $config['cwd'].$config['imagesDirectory'].'previews/';
             $video = '<div class="video-container"><div class="video-wrapper"><iframe src="https://player.vimeo.com/video/'.$vimeo[1].'" width="854" height="480" frameborder="0" allowfullscreen></iframe></div></div>';
@@ -18,6 +18,6 @@ class MaatGroup_vimeo implements MaatGroup
                 imagejpeg($thumb, $dir.$vimeo[1].'.thumb.jpg');
             }
         }
-        return $video;
+        return array($video, false);
     }
 }

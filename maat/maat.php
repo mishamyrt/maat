@@ -8,16 +8,19 @@ class Maat
     private $extensions = array();
     private $content = array();
     private $config = array();
-    protected $dict = array(
-    "/\(\(([^\(\)]*) ([^\(\)]*)\)\)/" => '<a href="$1">$2</a>',
-    "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(\s)/" => '<a href="$1">$1</a> ',
-    "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(<)/" => '<a href="$1">$1</a><',
-    "/\*\*([^\*]*)\*\*/" => "<b>$1</b>", //bold
-    "/\/\/([^\/*]*)\/\//" => "<i>$1</i>", //italic
-    "/<p>>(.*)<\/p>/" => '<blockquote><p>$1</p></blockquote>', //blockquote
-    "/<p># (.*)<\/p>/" => '<h2>$1</h2>', //h2
-    "/<p>## (.*)<\/p>/" => '<h3>$1</h3>' //h3
+    protected $lineDict = array(
+        "/\(\(([^\(\)]*) ([^\(\)]*)\)\)/" => '<a href="$1">$2</a>',
+        "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(\s)/" => '<a href="$1">$1</a> ',
+        "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(<)/" => '<a href="$1">$1</a><',
+        "/\*\*([^\*]*)\*\*/" => "<b>$1</b>", //bold
+        "/\/\/([^\/*]*)\/\//" => "<i>$1</i>" //italic
     );
+    protected $blockDict = array(
+        array("/^>(.*)/", '<blockquote><p>$1</p></blockquote>'),
+        array("/^# (.*)/", '<h2>$1</h2>'),
+        array("/^## (.*)/", '<h3>$1</h3>')
+    );
+
     function __construct()
     {
         $this->config = include('config.php');
@@ -41,16 +44,25 @@ class Maat
     }
     private function group_render($line)
     {
-        $render = $line;
+        $render = array();
+        $flag = false;
+        $needFormating = true;
         foreach ($this->extensions as $extension) {
-            $render = $extension['instance']->render($render, $this->config);
+            $render = $extension['instance']->render($line, $this->config);
+            if ($render[0] != $line){
+                $needFormating = $render[1];
+                $flag = true;
+                break;
+            }
         }
-        return $render;
+        return array($render[0], $needFormating, $flag);
     }
     public function render($text)
     {
         $text .= "\n";
         $lines = explode("\n", $text);
+        $linePatterns = array_keys($this->lineDict);
+        $lineValues = array_values($this->lineDict);
         $isHTML = false;
         $line = '';
         for ($i=0; $i < count($lines); $i++) {
@@ -63,11 +75,27 @@ class Maat
                 case '':
                     if ($isHTML) $isHTML = false;
                     else {
-                        $line = '<p>'.$line.'</p>';
-                        $patterns = array_keys($this->dict);
-                        $values = array_values($this->dict);
-                        $line = str_replace($line, preg_replace($patterns, $values, $line), $line);
-                        $line = $this->group_render($line);
+                        foreach ($this->blockDict as $block) {
+                            $regexp = $block[0];
+                            $replacement = $block[1];
+                            preg_match($regexp, $line, $result);
+                            if ($result) {
+                                $line = preg_replace($regexp, $replacement, $line);
+                                break 1;
+                            }
+                        }
+                        $needFormating = true;
+                        $result = $this->group_render($line);
+                        if ($result[2]){
+                            $line = $result[0];
+                            $needFormating = $result[1];
+                        }
+                        if ($needFormating){
+                            $line = preg_replace($linePatterns, $lineValues, $line);
+                        }
+                        else {
+                            $line = '<p>'.$line.'</p>';
+                        }
                     }
                     $this->content[] = $line;
                     $line = '';
