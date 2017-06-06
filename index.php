@@ -16,10 +16,10 @@ if (!include 'maat/maat.php') {
 
 $notes = '';
 $files = glob('tests/*.{txt}', GLOB_BRACE);
+$Mt = new Maat;
 foreach ($files as $file) {
     $notes .= '<div class="note">'."\n";
     $noteContent = file_get_contents($file);
-    $Mt = new Maat;
     $testName = basename($file, ".txt");
     $notes .= '<h2 class="title">'.$testName.'</h2>'."\n";
     $notes .= '<div class="content">'."\n";

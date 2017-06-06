@@ -117,6 +117,7 @@ class Maat
             }
         }
         $renderedContent = implode($this->content, "\n");
+        unset($this->content);
         return $renderedContent;
     }
 }
