@@ -49,7 +49,7 @@ class Maat
         $needFormating = true;
         foreach ($this->extensions as $extension) {
             $render = $extension['instance']->render($line, $this->config);
-            if (strlen($render[0]) != strlen($line)){
+            if (strlen($render[0]) != strlen($line)) {
                 $needFormating = $render[1];
                 $flag = true;
                 break;
@@ -67,17 +67,18 @@ class Maat
         $line = '';
         for ($i=0; $i < sizeof($lines); $i++) {
             $trimedLine = trim($lines[$i]);
-            switch ($trimedLine){
+            switch ($trimedLine) {
                 case '<html>':
                     $isHTML = true;
                     $line = $trimedLine."\n";
                     break;
                 case '':
-                    if ($isHTML) $isHTML = false;
-                    else {
-                        foreach ($this->blockDict as $block) {
-                            $regexp = $block[0];
-                            $replacement = $block[1];
+                    if ($isHTML) {
+                        $isHTML = false;
+                    } else {
+                        for ($j = 0; $j < sizeof($this->blockDict); $j++) {
+                            $regexp = $this->blockDict[$j][0];
+                            $replacement = $this->blockDict[$j][1];
                             preg_match($regexp, $line, $result);
                             if ($result) {
                                 $line = preg_replace($regexp, $replacement, $line);
@@ -85,15 +86,17 @@ class Maat
                             }
                         }
                         $needFormating = true;
+                        $p = true;
                         $result = $this->group_render($line);
-                        if ($result[2]){
+                        if ($result[2]) {
+                            $p = false;
                             $line = $result[0];
                             $needFormating = $result[1];
                         }
-                        if ($needFormating){
+                        if ($needFormating) {
                             $line = preg_replace($linePatterns, $lineValues, $line);
                         }
-                        else {
+                        if ($p) {
                             $line = '<p>'.$line.'</p>';
                         }
                     }
@@ -101,13 +104,14 @@ class Maat
                     $line = '';
                     break;
                 default:
-                    if ($isHTML) 
+                    if ($isHTML) {
                         $line .= $trimedLine."\n";
-                    else {
-                        if ($line == '')
+                    } else {
+                        if ($line == '') {
                             $line .= $trimedLine;
-                        else
+                        } else {
                             $line .= '<br>'.$trimedLine;
+                        }
                     }
                     break;
             }
