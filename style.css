@@ -99,3 +99,8 @@ body {
     font-weight: bold;
     font-size: 28px;
 }
+
+code {
+    margin-bottom: 10px;
+    display: block;
+}
