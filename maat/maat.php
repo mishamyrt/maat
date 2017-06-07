@@ -9,16 +9,16 @@ class Maat
     private $content = array();
     private $config = array();
     protected $lineDict = array(
-        "/\(\(([^\(\)]*) ([^\(\)]*)\)\)/" => '<a href="$1">$2</a>',
+        "/\(\(([^\(\)\s]*) ([^\(\)]*)\)\)/" => '<a href="$1">$2</a>',
         "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(\s)/" => '<a href="$1">$1</a> ',
         "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(<)/" => '<a href="$1">$1</a><',
         "/\*\*([^\*]*)\*\*/" => "<b>$1</b>", //bold
         "/\/\/([^\/*]*)\/\//" => "<i>$1</i>" //italic
     );
     protected $blockDict = array(
-        array("/^>(.*)/", '<blockquote><p>$1</p></blockquote>'),
-        array("/^# (.*)/", '<h2>$1</h2>'),
-        array("/^## (.*)/", '<h3>$1</h3>')
+        array("/^>\s*(.*)/", '<blockquote><p>$1</p></blockquote>'),
+        array("/^#\s*(.*)/", '<h2>$1</h2>'),
+        array("/^##\s*(.*)/", '<h3>$1</h3>')
     );
 
     function __construct()
