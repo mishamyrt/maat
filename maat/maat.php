@@ -8,13 +8,13 @@ class Maat
     private $extensions = array();
     private $content = array();
     private $config = array();
-    protected $lineDict = array(
+    private $lineDict = array(
         "/\(\(([^\(\)\s]*)\s([^\(\)]*)\)\)/" => '<a href="$1">$2</a>', // ((http://ya.ru/ яндекс))
         "/(^|\s)((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"\,]*)/" => '$1<a href="$2">$2</a>', //http://ya.ru
         "/\*\*([^\*]*)\*\*/" => "<b>$1</b>", //bold
         "/\/\/([^\/\"]+)\/\//" => "<i>$1</i>" //italic
     );
-    protected $blockDict = array(
+    private $blockDict = array(
         array("/^>\s*(.*)/", '<blockquote><p>$1</p></blockquote>'),
         array("/^#\s*(.*)/", '<h2>$1</h2>'),
         array("/^##\s*(.*)/", '<h3>$1</h3>')
@@ -28,33 +28,6 @@ class Maat
         foreach ($extensions as $extension) {
             $this->load_extension($extension);
         }
-    }
-    private function load_extension($file)
-    {
-        $name = basename ($file);
-        $name = basename($file, ".php");
-        $MaatGroupClass = 'MaatGroup_' . $name;
-        include_once $file;
-        $this->extensions[$name] = array (
-        'path' => dirname ($file) .'/'. $name .'/',
-        'instance' => new $MaatGroupClass ($this),
-        );
-        return true;
-    }
-    private function group_render($line)
-    {
-        $render = array();
-        $flag = false;
-        $needFormating = true;
-        foreach ($this->extensions as $extension) {
-            $render = $extension['instance']->render($line, $this->config);
-            if (strlen($render[0]) != strlen($line)) {
-                $needFormating = $render[1];
-                $flag = true;
-                break;
-            }
-        }
-        return array($render[0], $needFormating, $flag);
     }
     public function render($text)
     {
@@ -118,5 +91,32 @@ class Maat
         $renderedContent = implode($this->content, "\n");
         unset($this->content);
         return $renderedContent;
+    }
+    private function load_extension($file)
+    {
+        $name = basename ($file);
+        $name = basename($file, ".php");
+        $MaatGroupClass = 'MaatGroup_' . $name;
+        include_once $file;
+        $this->extensions[$name] = array (
+        'path' => dirname ($file) .'/'. $name .'/',
+        'instance' => new $MaatGroupClass ($this),
+        );
+        return true;
+    }
+    private function group_render($line)
+    {
+        $render = array();
+        $flag = false;
+        $needFormating = true;
+        foreach ($this->extensions as $extension) {
+            $render = $extension['instance']->render($line, $this->config);
+            if (strlen($render[0]) != strlen($line)) {
+                $needFormating = $render[1];
+                $flag = true;
+                break;
+            }
+        }
+        return array($render[0], $needFormating, $flag);
     }
 }
