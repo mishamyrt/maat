@@ -26,7 +26,7 @@ class Maat
         $this->config = include('config.php');
         $this->config['cwd'] = getcwd();
         $extensions = glob($this->config['directory'].'maat/extensions/*.php', GLOB_BRACE);
-        for ($i=0; $i < sizeof($extensions); $i++) { 
+        for ($i=0; $i < sizeof($extensions); $i++) {
             $this->load_extension($extensions[$i]);
         }
     }
@@ -50,12 +50,10 @@ class Maat
                         $isHTML = false;
                     } else {
                         for ($j = 0; $j < sizeof($this->blockDict); $j++) {
-                            $regexp = $this->blockDict[$j][0];
-                            $replacement = $this->blockDict[$j][1];
-                            preg_match($regexp, $line, $result);
+                            preg_match($this->blockDict[$j][0], $line, $result);
                             if ($result) {
-                                $line = preg_replace($regexp, $replacement, $line);
-                                break 1;
+                                $line = preg_replace($this->blockDict[$j][0], $this->blockDict[$j][1], $line);
+                                break;
                             }
                         }
                         $needFormating = true;
@@ -95,24 +93,21 @@ class Maat
     }
     private function load_extension(string $file): bool
     {
-        $name = basename ($file);
         $name = basename($file, ".php");
         $MaatGroupClass = 'MaatGroup_' . $name;
         include_once $file;
-        $this->extensions[$name] = array (
-        'path' => dirname ($file) .'/'. $name .'/',
-        'instance' => new $MaatGroupClass ($this),
-        );
+        $this->extensions[] = new $MaatGroupClass ($this);
         return true;
     }
     private function group_render(string $line): array
     {
         $render = array();
         $flag = false;
+        $length = strlen($line);
         $needFormating = true;
-        foreach ($this->extensions as $extension) {
-            $render = $extension['instance']->render($line, $this->config);
-            if (strlen($render[0]) != strlen($line)) {
+        for ($i=0; $i < sizeof($this->extensions); $i++) {
+            $render = $this->extensions[$i]->render($line, $this->config);
+            if (strlen($render[0]) !== $length) {
                 $needFormating = $render[1];
                 $flag = true;
                 break;
