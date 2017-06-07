@@ -1,7 +1,7 @@
 <?php
 class MaatGroup_vimeo implements MaatGroup
 {
-    function render($content, $config)
+    function render(string $content, array $config): array
     {
         $video = $content;
         preg_match("/.*vimeo\.com\/(.*)/", $content, $vimeo);

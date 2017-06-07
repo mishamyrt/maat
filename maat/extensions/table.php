@@ -1,7 +1,7 @@
 <?php
 class MaatGroup_table implements MaatGroup
 {
-    function render($content, $config)
+    function render(string $content, array $config): array
     {
         $renderedContent = $content;
         preg_match("/-{5}<br>(.*)<br>-{5}/", $content, $tableString);

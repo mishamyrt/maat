@@ -1,7 +1,7 @@
 <?php
 class MaatGroup_hipsterquote implements MaatGroup
 {
-    function render($content, $config)
+    function render(string $content, array $config): array
     {
         $renderedContent = $content;
         preg_match("/&&(.*)&&/", $content, $quote);

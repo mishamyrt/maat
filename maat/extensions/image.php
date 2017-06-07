@@ -2,7 +2,7 @@
 class MaatGroup_image implements MaatGroup
 {
     private $config = array ();
-    function render($content, $config)
+    function render(string $content, array $config): array
     {
         $this->config = $config;
         $renderedContent = $content;

@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 interface MaatGroup
 {
-    function render($content, $config);
+    function render(string $content, array $config): array;
 }
 class Maat
 {
@@ -25,11 +26,11 @@ class Maat
         $this->config = include('config.php');
         $this->config['cwd'] = getcwd();
         $extensions = glob($this->config['directory'].'maat/extensions/*.php', GLOB_BRACE);
-        foreach ($extensions as $extension) {
-            $this->load_extension($extension);
+        for ($i=0; $i < sizeof($extensions); $i++) { 
+            $this->load_extension($extensions[$i]);
         }
     }
-    public function render($text)
+    public function render(string $text): string
     {
         $text .= "\n";
         $lines = explode("\n", $text);
@@ -92,7 +93,7 @@ class Maat
         unset($this->content);
         return $renderedContent;
     }
-    private function load_extension($file)
+    private function load_extension(string $file): bool
     {
         $name = basename ($file);
         $name = basename($file, ".php");
@@ -104,7 +105,7 @@ class Maat
         );
         return true;
     }
-    private function group_render($line)
+    private function group_render(string $line): array
     {
         $render = array();
         $flag = false;
