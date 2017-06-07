@@ -78,7 +78,7 @@ class Maat
                     if ($isHTML) {
                         $line .= $trimedLine."\n";
                     } else {
-                        if ($line == '') {
+                        if ($line === '') {
                             $line .= $trimedLine;
                         } else {
                             $line .= '<br>'.$trimedLine;
