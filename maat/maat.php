@@ -9,11 +9,10 @@ class Maat
     private $content = array();
     private $config = array();
     protected $lineDict = array(
-        "/\(\(([^\(\)\s]*) ([^\(\)]*)\)\)/" => '<a href="$1">$2</a>',
-        "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(\s)/" => '<a href="$1">$1</a> ',
-        "/((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"]*)(<)/" => '<a href="$1">$1</a><',
+        "/\(\(([^\(\)\s]*)\s([^\(\)]*)\)\)/" => '<a href="$1">$2</a>', // ((http://ya.ru/ яндекс))
+        "/(^|\s)((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"\,]*)/" => '$1<a href="$2">$2</a>', //http://ya.ru
         "/\*\*([^\*]*)\*\*/" => "<b>$1</b>", //bold
-        "/\/\/([^\/*]*)\/\//" => "<i>$1</i>" //italic
+        "/\/\/([^\/\"]+)\/\//" => "<i>$1</i>" //italic
     );
     protected $blockDict = array(
         array("/^>\s*(.*)/", '<blockquote><p>$1</p></blockquote>'),
