@@ -4,7 +4,7 @@ class MaatGroup_youtube implements MaatGroup
     function render(string $content, array $config): array
     {
         $video = $content;
-        preg_match("/.*youtube\.com\/watch\?v=(.*)/", $content, $youtube);
+        preg_match("/^https?:\/\/.*youtube\.com\/watch\?v=(.*)/", $content, $youtube);
         if ($youtube) {
             $dir = $config['cwd'].$config['imagesDirectory'].'previews/';
             $video = '<div class="video-container"><div class="video-wrapper"><iframe width="854" height="480" src="https://www.youtube.com/embed/'.$youtube[1].'" frameborder="0" allowfullscreen></iframe></div></div>';

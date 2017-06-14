@@ -17,8 +17,8 @@ class Maat
     );
     private $blockDict = array(
         array("/^>\s*(.*)/", '<blockquote><p>$1</p></blockquote>'),
-        array("/^#\s*(.*)/", '<h2>$1</h2>'),
-        array("/^##\s*(.*)/", '<h3>$1</h3>')
+        array("/^##\s*(.*)/", '<h3>$1</h3>'),
+        array("/^#\s*(.*)/", '<h2>$1</h2>')
     );
 
     function __construct()
@@ -37,6 +37,7 @@ class Maat
         $linePatterns = array_keys($this->lineDict);
         $lineValues = array_values($this->lineDict);
         $isHTML = false;
+        $isCode = false;
         $line = '';
         for ($i=0; $i < sizeof($lines); $i++) {
             $trimedLine = trim($lines[$i]);
@@ -45,19 +46,30 @@ class Maat
                     $isHTML = true;
                     $line = $trimedLine."\n";
                     break;
+                case '<code>':
+                    $isCode = true;
+                    $line = $trimedLine . "\n";
+                    break;
                 case '':
                     if ($isHTML) {
                         $isHTML = false;
+                    } elseif ($isCode) {
+                        preg_match("/<code>(.*)<\/code>/s", $line, $quote);
+                            $code = htmlspecialchars($quote[1]);
+                            $code = str_replace('{', "&#123;", str_replace('}', "&#125;", $code));
+                            $line = '<code>'.$code.'</code>';
+                        $isCode = false;
                     } else {
+                        $p = true;
                         for ($j = 0; $j < sizeof($this->blockDict); $j++) {
                             preg_match($this->blockDict[$j][0], $line, $result);
                             if ($result) {
+                                $p = false;
                                 $line = preg_replace($this->blockDict[$j][0], $this->blockDict[$j][1], $line);
                                 break;
                             }
                         }
                         $needFormating = true;
-                        $p = true;
                         $result = $this->group_render($line);
                         if ($result[2]) {
                             $p = false;
@@ -77,6 +89,8 @@ class Maat
                 default:
                     if ($isHTML) {
                         $line .= $trimedLine."\n";
+                    } elseif ($isCode) {
+                        $line .= $lines[$i] . "\n";
                     } else {
                         if ($line === '') {
                             $line .= $trimedLine;

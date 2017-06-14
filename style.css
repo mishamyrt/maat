@@ -58,7 +58,18 @@ body {
     font-size: 12px;
     line-height: 16px;
 }
-
+a.img-link{
+    border: none;
+}
+a.img-link:hover{
+    border:none;
+}
+a.img-link img{
+    border: 1px solid #e8e8e8;
+}
+a.img-link img:hover{
+   border-color: rgb(160, 48, 0);
+}
 .note a:hover {
     color: rgb(160, 48, 0);
     border-color: rgba(160, 48, 0, 0.2);

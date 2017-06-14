@@ -2,11 +2,12 @@
 
 <code>
 <div class="fuckyeah">
+    indented
 </div>
 </code>
 
 <code>
 {{@true}}
-asda
+       asda
 {{end}}
 </code>
