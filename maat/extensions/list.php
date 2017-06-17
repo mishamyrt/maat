@@ -1,30 +1,38 @@
 <?php
-class MaatGroup_list implements MaatGroup
+class MaatExtension_list implements MaatExtension
 {
-    function render(string $content, array $config): array
+    function __construct($maat)
+    {   
+        $maat->define_trigger(
+            'list',
+            'ul',
+            '\*(.*)<br>\*',
+            true
+        );
+        $maat->define_trigger(
+            'list',
+            'ol',
+            '1\.(.*)<br>1\.',
+            true
+        );
+    }
+
+    function render(array $group, array $config): string
     {
-        $renderedContent = $content;
-        preg_match("/\*(.*)<br>\*/", $content, $list);
-        if ($list) {
-            $list = explode('<br>* ', $renderedContent);
-            $list[0] = substr($list[0], 2);
-            $renderedContent = '<ul>'."\n";
-            for ($i=0; $i < count($list); $i++) {
-                $renderedContent .= '<li><p>'.$list[$i].'</p></li>'."\n";
-            }
-            $renderedContent .= '</ul>';
-        } else {
-            preg_match("/1\.(.*)<br>1\./", $content, $list);
-            if ($list) {
-                $list = explode('<br>1. ', $renderedContent);
+        $render = '';
+        switch($group['class']){
+            case 'ul':
+                $list = explode('<br>* ', $group['line']);
+                $list[0] = substr($list[0], 2);
+            break;
+            case 'ol':
+                $list = explode('<br>1. ', $group['line']);
                 $list[0] = substr($list[0], 3);
-                $renderedContent = '<ol>'."\n";
-                for ($i=0; $i < count($list); $i++) {
-                    $renderedContent .= '<li><p>'.$list[$i].'</p></li>'."\n";
-                }
-                $renderedContent .= '</ol>';
-            }
+            break;
         }
-        return array($renderedContent, true);
+        for ($i=0; $i < sizeof($list); $i++) {
+            $render .= '<li><p>'.$list[$i].'</p></li>'."\n";
+        }
+        return '<'.$group['class'].'>'.$render.'</'.$group['class'].'>';
     }
 }

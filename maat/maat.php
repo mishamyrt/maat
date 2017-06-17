@@ -1,19 +1,21 @@
 <?php
 declare(strict_types=1);
-interface MaatGroup
+interface MaatExtension
 {
-    function render(string $content, array $config): array;
+    function render(array $group, array $config): string;
 }
 class Maat
 {
     private $extensions = array();
     private $content = array();
+    private $triggers = array();
     private $config = array();
     private $lineDict = array(
         "/\(\(([^\(\)\s]*)\s([^\(\)]*)\)\)/" => '<a href="$1">$2</a>', // ((http://ya.ru/ яндекс))
         "/(^|\s)((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"\,]*)/" => '$1<a href="$2">$2</a>', //http://ya.ru
         "/\*\*([^\*]*)\*\*/" => "<b>$1</b>", //bold
-        "/\/\/([^\/\"]+)\/\//" => "<i>$1</i>" //italic
+        "/\/\/([^\/\"]+)\/\//" => "<i>$1</i>", //italic
+        "/--([^\/\"]+)--/" => "<s>$1</s>" //italic
     );
     private $blockDict = array(
         array("/^>\s*(.*)/", '<blockquote><p>$1</p></blockquote>'),
@@ -29,6 +31,39 @@ class Maat
         for ($i=0; $i < sizeof($extensions); $i++) {
             $this->load_extension($extensions[$i]);
         }
+    }
+
+    private function render_with_extension(string $line): array
+    {
+        for ($i=0; $i < sizeof($this->triggers); $i++) {
+            preg_match($this->triggers[$i][2], $line, $result);
+            if ($result) {
+                $group = array(
+                    'class' => $this->triggers[$i][1],
+                    'class-data' => $result,
+                    'line' => $line
+                );
+                return array(
+                    $this->extensions[$this->triggers[$i][0]]->render($group, $this->config),
+                    $this->triggers[$i][3]
+                );
+            }
+        }
+        return array(false, false);
+    }
+
+    private function load_extension(string $file): bool
+    {
+        $name = basename($file, ".php");
+        $MaatExtensionClass = 'MaatExtension_' . $name;
+        include_once $file;
+        $this->extensions[$name] = new $MaatExtensionClass($this);
+        return true;
+    }
+    public function define_trigger(string $extension, string $class, string $regex, bool $formatting): bool
+    {
+        $this->triggers[] = array($extension, $class, '/^'.$regex.'/', $formatting);
+        return true;
     }
     public function render(string $text): string
     {
@@ -48,7 +83,7 @@ class Maat
                     break;
                 case '<code>':
                     $isCode = true;
-                    $line = $trimedLine . "\n";
+                    $line = $trimedLine;
                     break;
                 case '':
                     if ($isHTML) {
@@ -70,8 +105,8 @@ class Maat
                             }
                         }
                         $needFormating = true;
-                        $result = $this->group_render($line);
-                        if ($result[2]) {
+                        $result = $this->render_with_extension($line);
+                        if ($result[0] !== false) {
                             $p = false;
                             $line = $result[0];
                             $needFormating = $result[1];
@@ -83,7 +118,9 @@ class Maat
                             $line = '<p>'.$line.'</p>';
                         }
                     }
-                    $this->content[] = $line;
+                    if ($line !== '<p></p>') {
+                        $this->content[] = $line;
+                    }
                     $line = '';
                     break;
                 default:
@@ -104,29 +141,5 @@ class Maat
         $renderedContent = implode($this->content, "\n");
         unset($this->content);
         return $renderedContent;
-    }
-    private function load_extension(string $file): bool
-    {
-        $name = basename($file, ".php");
-        $MaatGroupClass = 'MaatGroup_' . $name;
-        include_once $file;
-        $this->extensions[] = new $MaatGroupClass ($this);
-        return true;
-    }
-    private function group_render(string $line): array
-    {
-        $render = array();
-        $flag = false;
-        $length = strlen($line);
-        $needFormating = true;
-        for ($i=0; $i < sizeof($this->extensions); $i++) {
-            $render = $this->extensions[$i]->render($line, $this->config);
-            if (strlen($render[0]) !== $length) {
-                $needFormating = $render[1];
-                $flag = true;
-                break;
-            }
-        }
-        return array($render[0], $needFormating, $flag);
     }
 }

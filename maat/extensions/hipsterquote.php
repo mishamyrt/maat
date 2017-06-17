@@ -1,13 +1,17 @@
 <?php
-class MaatGroup_hipsterquote implements MaatGroup
+class MaatExtension_hipsterquote implements MaatExtension
 {
-    function render(string $content, array $config): array
+    function __construct($maat)
+    {   
+        $maat->define_trigger(
+            'hipsterquote',
+            'hipstr',
+            '&&(.*)&&',
+            true
+        );
+    }
+    function render(array $group, array $config): string
     {
-        $renderedContent = $content;
-        preg_match("/&&(.*)&&/", $content, $quote);
-        if ($quote) {
-            $renderedContent = '<div class="hipster-quote">'.$quote[1].'</div>';
-        }
-        return array($renderedContent, false);
+        return  '<div class="hipster-quote">'.$group['class-data'][1].'</div>';
     }
 }

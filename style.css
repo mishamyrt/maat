@@ -27,10 +27,13 @@ body {
 
 .info {
     color: #939393;
-    line-height: 15px;
+    font-size: 13px;
+    line-height: 17px;
 }
-
-.note blockquote {
+.note ul{
+    list-style-type: none;
+}
+.note blockquote, .note code, .note ul, .note ol {
     margin: 0 0 10px;
     padding-left: 30px;
     max-width: 760px
@@ -110,8 +113,12 @@ a.img-link img:hover{
     font-weight: bold;
     font-size: 28px;
 }
-
+.note h3{
+        margin: 15px 0 2px;
+}
 code {
+        color: #5e6b6f;
+    white-space: pre;
     margin-bottom: 10px;
     display: block;
 }
