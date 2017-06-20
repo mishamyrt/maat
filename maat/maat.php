@@ -67,6 +67,8 @@ class Maat
     }
     public function render(string $text): string
     {
+        if (trim($text) === '')
+            return '';
         $text .= "\n";
         $lines = explode("\n", $text);
         $linePatterns = array_keys($this->lineDict);
