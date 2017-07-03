@@ -23,7 +23,7 @@ class MaatExtension_image implements MaatExtension
         } else {
             $link = '';
         }
-        $linkbegin = ($link !== '') ? '<a href="'.$link.'">' : '';
+        $linkbegin = ($link !== '') ? '<a href="'.$link.'" class="img-link">' : '';
         $linkend = ($link !== '') ? '</a>' : '';
         $alt = $alt !== '' ? 'alt="'.$alt.'" ' : '';
         $file = $group['class-data'][1].'.'.$group['class-data'][2];
