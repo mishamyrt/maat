@@ -26,8 +26,8 @@ foreach ($files as $file) {
     $stopwatch = stopwatch();
     $notes .= $Mt->render($noteContent)."\n";
     $notes .= '<div class="info">Generated in '."\n";
-    $notes .= stopwatch() - $stopwatch;
-    $notes .= 's</div>'."\n";
+    $notes .= stopwatch() - $stopwatch . 's';
+    $notes .= '</div>'."\n";
     $notes .= '</div>'."\n";
     $notes .= '</div>'."\n";
 }
