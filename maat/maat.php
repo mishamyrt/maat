@@ -9,7 +9,7 @@ class Maat
     private $extensions = array();
     private $content = array();
     private $triggers = array();
-    private $config = array();
+    public $config = array();
     private $lineDict = array(
         "/\(\(([^\(\)\s]*)\s([^\(\)]*)\)\)/" => '<a href="$1">$2</a>', // ((http://ya.ru/ яндекс))
         "/(^|\s)((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"\,]*)/" => '$1<a href="$2">$2</a>', //http://ya.ru
@@ -23,10 +23,18 @@ class Maat
         array("/^#\s*(.*)/", '<h2>$1</h2>')
     );
 
-    function __construct()
-    {
+    function __construct(string $profile = '')
+    {   
         $this->config = include('config.php');
-        $this->config['cwd'] = getcwd();
+        if (isset($this->config['profiles'][$profile])){
+            foreach ($this->config['profiles'][$profile] as $key => $value){
+                $this->config[$key] = $value;
+            }
+        }
+        else if($profile !== ''){
+            echo 'There is no profile named "'.$profile.'", falling back to default';
+        }
+        var_dump($this->config['basic-html']);
         $extensions = glob($this->config['folder'].'/extensions/*.php', GLOB_BRACE);
         for ($i=0; $i < sizeof($extensions); $i++) {
             $this->load_extension($extensions[$i]);
@@ -63,7 +71,9 @@ class Maat
     }
     public function define_trigger(string $extension, string $class, string $regex, bool $formatting): bool
     {
-        $this->triggers[] = array($extension, $class, '/^'.$regex.'/', $formatting);
+        if(!in_array($extension, $this->config['banned-extensions'], true)){
+            $this->triggers[] = array($extension, $class, '/^'.$regex.'/', $formatting);  
+        }
         return true;
     }
     public function render(string $text): string

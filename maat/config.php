@@ -1,6 +1,12 @@
 <?php
 return array(
   'folder' => './maat',
+  'profiles' => array(
+    'rss' => array(
+      'basic-html' => true,
+      'banned-extensions' => ['onlinevideo', 'hipsterquote']
+    )
+  ),
   'extensions' => array(
     'image' => array(
       'src-prefix' => '',
@@ -16,4 +22,6 @@ return array(
       'wrapper-class' => 'video-wrapper'
     )
   ),
+  'basic-html' => false,
+  'banned-extensions' => array()
 );

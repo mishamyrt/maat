@@ -1,8 +1,10 @@
 <?php
 class MaatExtension_image implements MaatExtension
 {
+    private $maat;
     function __construct($maat)
     {
+        $this->maat = $maat;
         $maat->define_trigger(
             'image',
             'img',
@@ -34,10 +36,19 @@ class MaatExtension_image implements MaatExtension
             $width = min(array($width, $group['config']['max-width']));
             // $width = $width > $group['config']['max-width'] : $group['config']['max-width']
             $proportion = round(100*$size[1]/$size[0], 2);
-            return '<div style="max-width:'.$width.'px" class="'.$group['config']['container-class'].'">'.
+            if ($this->maat->config['basic-html']){
+                $img = '<img src="'.$urldir.$file.'" style="max-width:100%" width="'.$width.'px" '.$alt.'>';
+                if ($link){
+                    $img = '<a href="'.$link.'">'.$img.'</a>';
+                }
+            }
+            else{
+                $img = '<div style="max-width:'.$width.'px" class="'.$group['config']['container-class'].'">'.
                    $linkbegin.'<div class="'.$group['config']['wrapper-class'].'" style="padding-bottom:'.$proportion.'%">'.
                    '<img src="'.$urldir.$file.'" '.$alt.'>'.
                    '</div>'.$description.$linkend.'</div>';
+            }
+            return $img;
         }
         return '';
     }
