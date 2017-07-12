@@ -17,7 +17,7 @@ class MaatExtension_list implements MaatExtension
         );
     }
 
-    function render(array $group, array $config): string
+    function render(array $group): string
     {
         $render = '';
         switch($group['class']){

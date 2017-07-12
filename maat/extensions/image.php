@@ -11,10 +11,10 @@ class MaatExtension_image implements MaatExtension
         );
     }
 
-    function render(array $group, array $config): string
+    function render(array $group): string
     {
-        $urldir = $config['imagesDirectory'].'pictures/';
-        $dir = $config['cwd'].$urldir;
+        $urldir = $group['config']['folder'];
+        $dir = '.'.$group['config']['folder'];
         $alt = isset($group['class-data'][3]) ? $group['class-data'][3] : '';
         $description = strstr($group['line'], "<br>") ? '<p>' . explode("<br>", $group['line'])[1] . '</p>' : '';
         @list ($link, $newalt) = explode (' ', $alt, 2);
@@ -27,13 +27,15 @@ class MaatExtension_image implements MaatExtension
         $linkend = ($link !== '') ? '</a>' : '';
         $alt = $alt !== '' ? 'alt="'.$alt.'" ' : '';
         $file = $group['class-data'][1].'.'.$group['class-data'][2];
-        $retina = (($alt === 'alt="2x"') || substr($group['class-data'][1], -3, 3) === '@2x') ? true : false;
+        $retina = substr($group['class-data'][1], -3, 3) === '@2x' ? true : false;
         if (file_exists($dir.$file)) {
             $size = getimagesize($dir.$file);
             $width = $retina ? $size[0] / 2 : $size[0];
+            $width = min(array($width, $group['config']['max-width']));
+            // $width = $width > $group['config']['max-width'] : $group['config']['max-width']
             $proportion = round(100*$size[1]/$size[0], 2);
-            return '<div style="max-width:'.$width.'px" class="img-container honey">'.
-                   $linkbegin.'<div class="img-wrapper" style="padding-bottom:'.$proportion.'%">'.
+            return '<div style="max-width:'.$width.'px" class="'.$group['config']['container-class'].'">'.
+                   $linkbegin.'<div class="'.$group['config']['wrapper-class'].'" style="padding-bottom:'.$proportion.'%">'.
                    '<img src="'.$urldir.$file.'" '.$alt.'>'.
                    '</div>'.$description.$linkend.'</div>';
         }

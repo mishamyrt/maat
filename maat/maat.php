@@ -2,7 +2,7 @@
 declare(strict_types=1);
 interface MaatExtension
 {
-    function render(array $group, array $config): string;
+    function render(array $group): string;
 }
 class Maat
 {
@@ -27,7 +27,7 @@ class Maat
     {
         $this->config = include('config.php');
         $this->config['cwd'] = getcwd();
-        $extensions = glob($this->config['directory'].'maat/extensions/*.php', GLOB_BRACE);
+        $extensions = glob($this->config['folder'].'/extensions/*.php', GLOB_BRACE);
         for ($i=0; $i < sizeof($extensions); $i++) {
             $this->load_extension($extensions[$i]);
         }
@@ -41,10 +41,11 @@ class Maat
                 $group = array(
                     'class' => $this->triggers[$i][1],
                     'class-data' => $result,
-                    'line' => $line
+                    'line' => $line,
+                    'config' => isset($this->config['extensions'][$this->triggers[$i][0]]) ? $this->config['extensions'][$this->triggers[$i][0]] : ''
                 );
                 return array(
-                    $this->extensions[$this->triggers[$i][0]]->render($group, $this->config),
+                    $this->extensions[$this->triggers[$i][0]]->render($group),
                     $this->triggers[$i][3]
                 );
             }

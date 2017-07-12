@@ -10,7 +10,7 @@ class MaatExtension_table implements MaatExtension
             true
         );
     }
-    function render(array $group, array $config): string
+    function render(array $group): string
     {
         $render = '';
         $lines = explode('<br>', $group['line']);

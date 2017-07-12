@@ -55,15 +55,6 @@ body {
     height: 100%;
 }
 
-.img-wrapper img {
-    width: 100%;
-    position: absolute;
-}
-
-.img-wrapper {
-    position: relative;
-}
-
 .img-container p {
     margin: 6px 0 10px 0;
     font-size: 12px;
@@ -81,6 +72,15 @@ a.img-link img{
 a.img-link img:hover{
    border-color: rgb(160, 48, 0);
 }
+.img-wrapper img {
+    width: 100%;
+    position: absolute;
+}
+
+.img-wrapper {
+    position: relative;
+}
+
 .note a:hover {
     color: rgb(160, 48, 0);
     border-color: rgba(160, 48, 0, 0.2);
