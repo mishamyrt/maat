@@ -24,17 +24,16 @@ class Maat
     );
 
     function __construct(string $profile = '')
-    {   
+    {
         $this->config = include('config.php');
-        if (isset($this->config['profiles'][$profile])){
-            foreach ($this->config['profiles'][$profile] as $key => $value){
+        if (isset($this->config['profiles'][$profile])) {
+            foreach ($this->config['profiles'][$profile] as $key => $value) {
                 $this->config[$key] = $value;
             }
+            $this->config['profile'] = $profile;
+        } elseif ($profile !== '') {
+            echo 'There is no profile "'.$profile.'", falling back to default';
         }
-        else if($profile !== ''){
-            echo 'There is no profile named "'.$profile.'", falling back to default';
-        }
-        var_dump($this->config['basic-html']);
         $extensions = glob($this->config['folder'].'/extensions/*.php', GLOB_BRACE);
         for ($i=0; $i < sizeof($extensions); $i++) {
             $this->load_extension($extensions[$i]);
@@ -71,15 +70,16 @@ class Maat
     }
     public function define_trigger(string $extension, string $class, string $regex, bool $formatting): bool
     {
-        if(!in_array($extension, $this->config['banned-extensions'], true)){
-            $this->triggers[] = array($extension, $class, '/^'.$regex.'/', $formatting);  
+        if (!in_array($extension, $this->config['banned-extensions'], true)) {
+            $this->triggers[] = array($extension, $class, '/^'.$regex.'/', $formatting);
         }
         return true;
     }
     public function render(string $text): string
     {
-        if (trim($text) === '')
+        if (trim($text) === '') {
             return '';
+        }
         $text .= "\n";
         $lines = explode("\n", $text);
         $linePatterns = array_keys($this->lineDict);
@@ -105,7 +105,7 @@ class Maat
                         preg_match("/<code>(.*)<\/code>/s", $line, $quote);
                             $code = htmlspecialchars($quote[1]);
                             $code = str_replace('{', "&#123;", str_replace('}', "&#125;", $code));
-                            $line = '<code>'.$code.'</code>';
+                            $line = $this->config['code-wrap'][0].$code.$this->config['code-wrap'][1];
                         $isCode = false;
                     } else {
                         $p = true;

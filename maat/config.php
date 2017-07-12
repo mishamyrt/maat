@@ -4,7 +4,8 @@ return array(
   'profiles' => array(
     'rss' => array(
       'basic-html' => true,
-      'banned-extensions' => ['onlinevideo', 'hipsterquote']
+      'banned-extensions' => ['hipsterquote'],
+      'code-wrap' => array ('<pre><code>', '</code></pre>'), 
     )
   ),
   'extensions' => array(
@@ -23,5 +24,6 @@ return array(
     )
   ),
   'basic-html' => false,
+  'code-wrap' => array ('<pre class="code-container"><code>', '</code></pre>'), 
   'banned-extensions' => array()
 );
