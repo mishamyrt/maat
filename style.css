@@ -17,7 +17,10 @@ body {
     padding-left: 30px;
     max-width: 760px
 }
-
+.caps{
+    letter-spacing: .06em;
+    margin-right: -.06em;
+}
 .note p {
     margin: 0 0 10px;
     max-width: 720px;

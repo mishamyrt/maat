@@ -11,11 +11,12 @@ class Maat
     private $triggers = array();
     public $config = array();
     private $lineDict = array(
-        "/\(\(([^\(\)\s]*)\s([^\(\)]*)\)\)/" => '<a href="$1">$2</a>', // ((http://ya.ru/ яндекс))
-        "/(^|\s)((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"\,]*)/" => '$1<a href="$2">$2</a>', //http://ya.ru
-        "/\*\*([^\*]*)\*\*/" => "<b>$1</b>", //bold
-        "/\/\/([^\/\"]+)\/\//" => "<i>$1</i>", //italic
-        "/--([^\/\"]+)--/" => "<s>$1</s>" //italic
+        '/\(\(([^\(\)\s]*)\s([^\(\)]*)\)\)/' => '<a href="$1">$2</a>', // ((http://ya.ru/ яндекс))
+        '/(^|\s)((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"\,]*)/' => '$1<a href="$2">$2</a>', //http://ya.ru
+        '/\*\*([^\*]*)\*\*/' => '<b>$1</b>', //bold
+        '/\/\/([^\/\"]+)\/\//' => '<i>$1</i>', //italic
+        '/--([^\/\"]+)--/' => '<s>$1</s>', //italic
+        '/\b[A-ZА-ЯЁ][A-ZА-ЯЁ0-9]+\b/u' => '<span class="caps">$0</span>'
     );
     private $blockDict = array(
         array("/^>\s*(.*)/", '<blockquote><p>$1</p></blockquote>'),
