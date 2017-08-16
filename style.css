@@ -13,7 +13,7 @@ body {
     list-style-type: none;
 }
 .note blockquote, .note code, .note ul, .note ol {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     padding-left: 30px;
     max-width: 760px
 }
@@ -22,12 +22,13 @@ body {
     margin-right: -.06em;
 }
 .note p {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     max-width: 720px;
 }
 
 .note h2.title {
-    font-size: 36px;
+    text-transform: capitalize;
+    font-size: 32px;
     line-height: 40px;
 }
 
@@ -40,7 +41,7 @@ body {
 .video-container {
     width: 1200px;
     max-width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .video-wrapper {
@@ -59,7 +60,7 @@ body {
 }
 
 .img-container p {
-    margin: 6px 0 10px 0;
+    margin: 6px 0 8px 0;
     font-size: 12px;
     line-height: 16px;
 }
@@ -92,7 +93,7 @@ a.img-link img:hover{
 .note h2 {
     font-size: 1em;
     line-height: inherit;
-    margin: 26px 0 10px 0;
+    margin: 26px 0 8px 0;
 }
 
 .note table td {
@@ -108,9 +109,9 @@ a.img-link img:hover{
 .hipster-quote {
     border: 5px solid #da570f;
     max-width: 720px;
-    padding: 28px 10px;
+    padding: 28px 8px;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-weight: bold;
     font-size: 28px;
 }
@@ -120,6 +121,6 @@ a.img-link img:hover{
 code {
         color: #5e6b6f;
     white-space: pre;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     display: block;
 }

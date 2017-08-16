@@ -16,7 +16,7 @@ class Maat
         '/\*\*([^\*]*)\*\*/' => '<b>$1</b>', //bold
         '/\/\/([^\/\"]+)\/\//' => '<i>$1</i>', //italic
         '/--([^\/\"]+)--/' => '<s>$1</s>', //italic
-        '/\b[A-ZА-ЯЁ][A-ZА-ЯЁ0-9]+\b/u' => '<span class="caps">$0</span>'
+        '/\b[A-ZА-ЯЁ][A-ZА-ЯЁ]+\b[\.\s]/u' => '<span class="caps">$0</span>' // Class to upper case words
     );
     private $blockDict = array(
         array("/^>\s*(.*)/", '<blockquote><p>$1</p></blockquote>'),

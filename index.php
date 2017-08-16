@@ -16,7 +16,7 @@ if (!include 'maat/maat.php') {
 
 $notes = '';
 $files = glob('tests/*.{txt}', GLOB_BRACE);
-$Mt = new Maat('rss');
+$Mt = new Maat();
 foreach ($files as $file) {
     $notes .= '<div class="note">'."\n";
     $noteContent = file_get_contents($file);
