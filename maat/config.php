@@ -12,15 +12,15 @@ return array(
     'image' => array(
       'src-prefix' => '',
       'folder' => '/img/pictures/',
-      'wrapper-class' => 'img-wrapper',
+      'wrapper-class' => 'note-img-wrapper',
       'max-width' => 1600,
-      'container-class' => 'img-container honey'
+      'container-class' => 'note-img honey'
     ),
     'onlinevideo' => array(
-      'container-class' => 'video-container',
+      'container-class' => 'note-video-container',
       'folder' => '/img/previews/',
       'max-width' => 1600,
-      'wrapper-class' => 'video-wrapper'
+      'wrapper-class' => 'note-video-wrapper'
     )
   ),
   'basic-html' => false,

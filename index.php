@@ -39,6 +39,7 @@ foreach ($files as $file) {
     <meta charset="utf-8">
     <title>Maat test</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="maat.css">
   </head>
   <body>
     <?php echo $notes ?>
