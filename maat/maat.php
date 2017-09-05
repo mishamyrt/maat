@@ -92,8 +92,11 @@ class Maat
             $trimedLine = trim($lines[$i]);
             switch ($trimedLine) {
                 case '<html>':
-                    $isHTML = true;
-                    $line = $trimedLine."\n";
+                case '<style>':
+                    if (!$isHTML) {
+                        $isHTML = true;
+                        $line = $trimedLine."\n";
+                    }
                     break;
                 case '<code>':
                     $isCode = true;
@@ -109,27 +112,46 @@ class Maat
                             $line = $this->config['code-wrap'][0].$code.$this->config['code-wrap'][1];
                         $isCode = false;
                     } else {
-                        $p = true;
-                        for ($j = 0; $j < sizeof($this->blockDict); $j++) {
-                            preg_match($this->blockDict[$j][0], $line, $result);
-                            if ($result) {
-                                $p = false;
-                                $line = preg_replace($this->blockDict[$j][0], $this->blockDict[$j][1], $line);
-                                break;
+                        $lenght = strlen($line);
+                        if ($lenght > 0) {
+                            $p = true;
+                            for ($j = 0; $j < sizeof($this->blockDict); $j++) {
+                                preg_match($this->blockDict[$j][0], $line, $result);
+                                if ($result) {
+                                    $p = false;
+                                    $line = preg_replace($this->blockDict[$j][0], $this->blockDict[$j][1], $line);
+                                    break;
+                                }
                             }
-                        }
-                        $needFormating = true;
-                        $result = $this->render_with_extension($line);
-                        if ($result[0] !== false) {
-                            $p = false;
-                            $line = $result[0];
-                            $needFormating = $result[1];
-                        }
-                        if ($needFormating) {
-                            $line = preg_replace($linePatterns, $lineValues, $line);
-                        }
-                        if ($p) {
-                            $line = '<p>'.$line.'</p>';
+                            $needFormating = true;
+                            $result = $this->render_with_extension($line);
+                            if ($result[0] !== false) {
+                                $p = false;
+                                $line = $result[0];
+                                $needFormating = $result[1];
+                            }
+                            if ($needFormating) {
+                                $line = preg_replace($linePatterns, $lineValues, $line);
+                            }
+                            if ($p) {
+                                $class = '';
+                                if ($line[0] == '.') {
+                                    $k;
+                                    for ($k = 1; $k < $lenght; $k++) {
+                                        if ($line[$k] !== ' ') {
+                                            $class .= $line[$k];
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                    $line = mb_substr($line, $k + 1, $lenght-$k);
+                                }
+                                if ($class !== '') {
+                                    $line = '<p class="'.$class.'">'.$line.'</p>';
+                                } else {
+                                    $line = '<p>'.$line.'</p>';
+                                }
+                            }
                         }
                     }
                     if ($line !== '<p></p>') {
