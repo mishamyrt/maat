@@ -92,11 +92,16 @@ class Maat
             $trimedLine = trim($lines[$i]);
             switch ($trimedLine) {
                 case '<html>':
+                    $isHTML = true;
+                    $line = $trimedLine."\n";
+                    break;
                 case '<style>':
-                    if (!$isHTML) {
+                    if (!$isHTML){
                         $isHTML = true;
                         $line = $trimedLine."\n";
                     }
+                    else
+                        $line .= $trimedLine."\n";
                     break;
                 case '<code>':
                     $isCode = true;
