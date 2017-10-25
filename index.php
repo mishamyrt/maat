@@ -19,7 +19,8 @@ $files = glob('tests/*.{txt}', GLOB_BRACE);
 $Mt = new Maat();
 foreach ($files as $file) {
     $notes .= '<div class="note">'."\n";
-    $noteContent = file_get_contents($file);
+    $noteContent = file_get_contents($file, FILE_TEXT);
+    // echo $noteContent;
     $testName = basename($file, ".txt");
     $notes .= '<h2 class="title">'.$testName.'</h2>'."\n";
     $notes .= '<div class="content">'."\n";
