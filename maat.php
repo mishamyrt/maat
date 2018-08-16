@@ -8,23 +8,23 @@ interface Extension
 }
 class Renderer
 {
-    private $extensions = array();
-    private $content = array();
-    private $triggers = array();
-    public $config = array();
-    private $lineDict = array(
-        '/\(\(([^\(\)\s]*)\s([^\(\)]*)\)\)/' => '<a href="$1">$2</a>', // ((http://ya.ru/ яндекс))
-        '/(^|\s)((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"\,]*)/' => '$1<a href="$2">$2</a>', //http://ya.ru
-        '/\*\*([^\*]*)\*\*/' => '<b>$1</b>', //bold
-        '/\/\/([^\/\"]+)\/\//' => '<i>$1</i>', //italic
-        '/--([^\/\"]+)--/' => '<s>$1</s>', //italic
-        '/\b[A-ZА-ЯЁ][A-ZА-ЯЁ]+\b[\.\s]/u' => '<span class="caps">$0</span>' // Class to upper case words
-    );
-    private $blockDict = array(
-        array("/^>\s*(.*)/", '<blockquote><p>$1</p></blockquote>'),
-        array("/^##\s*(.*)/", '<h3>$1</h3>'),
-        array("/^#\s*(.*)/", '<h2>$1</h2>')
-    );
+    private $extensions = [];
+    private $content = [];
+    private $triggers = [];
+    public $config = [];
+    private $lineDict = [
+        '/\(\(([^\(\)\s]*)\s([^\(\)]*)\)\)/' => '<a href="$1">$2</a>',
+        '/(^|\s)((?:https?|ftps?)\:\/\/[\w\d\#\.\/&=%-_!\?\@\*][^\s<>\"\,]*)/' => '$1<a href="$2">$2</a>',
+        '/\*\*([^\*]*)\*\*/' => '<b>$1</b>',
+        '/\/\/([^\/\"]+)\/\//' => '<i>$1</i>',
+        '/--([^\/\"]+)--/' => '<s>$1</s>',
+        '/\b[A-ZА-ЯЁ][A-ZА-ЯЁ]+\b[\.\s]/u' => '<span class="caps">$0</span>'
+    ];
+    private $blockDict = [
+        ["/^>\s*(.*)/", '<blockquote><p>$1</p></blockquote>'],
+        ["/^##\s*(.*)/", '<h3>$1</h3>'],
+        ["/^#\s*(.*)/", '<h2>$1</h2>']
+    ];
 
     function __construct(string $profile = '')
     {
@@ -48,19 +48,19 @@ class Renderer
         for ($i = 0; $i < sizeof($this->triggers); $i++) {
             preg_match($this->triggers[$i][2], $line, $result);
             if ($result) {
-                $group = array(
+                $group = [
                     'class' => $this->triggers[$i][1],
                     'class-data' => $result,
                     'line' => $line,
                     'config' => isset($this->config['extensions'][$this->triggers[$i][0]]) ? $this->config['extensions'][$this->triggers[$i][0]] : ''
-                );
-                return array(
+                ];
+                return [
                     $this->extensions[$this->triggers[$i][0]]->render($group),
                     $this->triggers[$i][3]
-                );
+                ];
             }
         }
-        return array(false, false);
+        return [false, false];
     }
 
     private function load_extension(string $file) : bool
@@ -74,7 +74,7 @@ class Renderer
     public function define_trigger(string $extension, string $class, string $regex, bool $formatting) : bool
     {
         if (!in_array($extension, $this->config['banned-extensions'], true)) {
-            $this->triggers[] = array($extension, $class, '/^' . $regex . '/', $formatting);
+            $this->triggers[] = [$extension, $class, '/^' . $regex . '/', $formatting];
         }
         return true;
     }
