@@ -1,6 +1,6 @@
 <?php
 return array(
-  'folder' => './maat',
+  'folder' => './',
   'profiles' => array(
     'rss' => array(
       'basic-html' => true,

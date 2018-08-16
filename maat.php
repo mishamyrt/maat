@@ -1,5 +1,7 @@
 <?php
 declare(strict_types=1);
+namespace Maat;
+
 interface MaatExtension
 {
     function render(array $group): string;
@@ -26,7 +28,7 @@ class Maat
 
     function __construct(string $profile = '')
     {
-        $this->config = include('config.php');
+        $this->config = require './config.php';
         if (isset($this->config['profiles'][$profile])) {
             foreach ($this->config['profiles'][$profile] as $key => $value) {
                 $this->config[$key] = $value;
@@ -35,7 +37,7 @@ class Maat
         } elseif ($profile !== '') {
             echo 'There is no profile "'.$profile.'", falling back to default';
         }
-        $extensions = glob($this->config['folder'].'/extensions/*.php', GLOB_BRACE);
+        $extensions = glob('./extensions/*.php', GLOB_BRACE);
         for ($i=0; $i < sizeof($extensions); $i++) {
             $this->load_extension($extensions[$i]);
         }

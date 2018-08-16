@@ -1,0 +1,13 @@
+{
+    "name": "mishamyrt/maat",
+    "type": "library",
+    "keywords": ["templating", "markdown"],
+    "description": "Markdown–like text rendering engine",
+    "license": "MIT",
+    "require": {
+        "php": "^7.0"
+    },
+    "autoload": {
+        "files": [ "./src/maat.php" ]
+    }
+}

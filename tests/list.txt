@@ -1,7 +1,0 @@
-    СПисок
-
-    * asdasds
-    * asdas
-
-    1. asdasds
-    1. **asdasd**
