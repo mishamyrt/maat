@@ -37,7 +37,7 @@ class Renderer
         } elseif ($profile !== '') {
             echo 'There is no profile "' . $profile . '", falling back to default';
         }
-        $extensions = glob('extensions/*.php', GLOB_BRACE);
+        $extensions = glob(__DIR__ . '/extensions/*.php', GLOB_BRACE);
         for ($i = 0; $i < sizeof($extensions); $i++) {
             $this->load_extension($extensions[$i]);
         }
@@ -67,7 +67,7 @@ class Renderer
     {
         $name = basename($file, ".php");
         $MaatExtensionClass = 'MaatExtension_' . $name;
-        include_once $file;
+        require $file;
         $this->extensions[$name] = new $MaatExtensionClass($this);
         return true;
     }
