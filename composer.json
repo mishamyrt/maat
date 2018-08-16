@@ -8,6 +8,6 @@
         "php": "^7.0"
     },
     "autoload": {
-        "files": [ "./src/maat.php" ]
+        "files": [ "maat.php" ]
     }
 }
