@@ -1,5 +1,6 @@
 {
     "name": "mishamyrt/maat",
+    "version": "1.0.0",
     "type": "library",
     "keywords": ["templating", "markdown"],
     "description": "Markdown–like text rendering engine",
@@ -9,10 +10,5 @@
     },
     "autoload": {
         "files": [ "maat.php" ]
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.0-dev"
-        }
     }
 }
