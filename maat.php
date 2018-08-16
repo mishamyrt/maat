@@ -37,7 +37,7 @@ class Renderer
         } elseif ($profile !== '') {
             echo 'There is no profile "' . $profile . '", falling back to default';
         }
-        $extensions = glob('./extensions/*.php', GLOB_BRACE);
+        $extensions = glob('extensions/*.php', GLOB_BRACE);
         for ($i = 0; $i < sizeof($extensions); $i++) {
             $this->load_extension($extensions[$i]);
         }
