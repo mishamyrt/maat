@@ -28,7 +28,7 @@ class Renderer
 
     function __construct(string $profile = '')
     {
-        $this->config = require 'config.php';
+        $this->config = require __DIR__ . '/config.php';
         if (isset($this->config['profiles'][$profile])) {
             foreach ($this->config['profiles'][$profile] as $key => $value) {
                 $this->config[$key] = $value;
