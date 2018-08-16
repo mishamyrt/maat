@@ -1,8 +1,8 @@
 <?php
-class MaatExtension_list implements MaatExtension
+class MaatExtension_list implements Maat\Extension
 {
     function __construct($maat)
-    {   
+    {
         $maat->define_trigger(
             'list',
             'ul',
@@ -17,22 +17,22 @@ class MaatExtension_list implements MaatExtension
         );
     }
 
-    function render(array $group): string
+    function render(array $group) : string
     {
         $render = '';
-        switch($group['class']){
+        switch ($group['class']) {
             case 'ul':
                 $list = explode('<br>* ', $group['line']);
                 $list[0] = substr($list[0], 2);
-            break;
+                break;
             case 'ol':
                 $list = explode('<br>1. ', $group['line']);
                 $list[0] = substr($list[0], 3);
-            break;
+                break;
         }
-        for ($i=0; $i < sizeof($list); $i++) {
-            $render .= '<li><p>'.$list[$i].'</p></li>'."\n";
+        for ($i = 0; $i < sizeof($list); $i++) {
+            $render .= '<li><p>' . $list[$i] . '</p></li>' . "\n";
         }
-        return '<'.$group['class'].'>'.$render.'</'.$group['class'].'>';
+        return '<' . $group['class'] . '>' . $render . '</' . $group['class'] . '>';
     }
 }

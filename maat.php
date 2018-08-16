@@ -1,12 +1,12 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 namespace Maat;
 
-interface MaatExtension
+interface Extension
 {
-    function render(array $group): string;
+    function render(array $group) : string;
 }
-class Maat
+class Renderer
 {
     private $extensions = array();
     private $content = array();
@@ -28,24 +28,24 @@ class Maat
 
     function __construct(string $profile = '')
     {
-        $this->config = require './config.php';
+        $this->config = require 'config.php';
         if (isset($this->config['profiles'][$profile])) {
             foreach ($this->config['profiles'][$profile] as $key => $value) {
                 $this->config[$key] = $value;
             }
             $this->config['profile'] = $profile;
         } elseif ($profile !== '') {
-            echo 'There is no profile "'.$profile.'", falling back to default';
+            echo 'There is no profile "' . $profile . '", falling back to default';
         }
         $extensions = glob('./extensions/*.php', GLOB_BRACE);
-        for ($i=0; $i < sizeof($extensions); $i++) {
+        for ($i = 0; $i < sizeof($extensions); $i++) {
             $this->load_extension($extensions[$i]);
         }
     }
 
-    private function render_with_extension(string $line): array
+    private function render_with_extension(string $line) : array
     {
-        for ($i=0; $i < sizeof($this->triggers); $i++) {
+        for ($i = 0; $i < sizeof($this->triggers); $i++) {
             preg_match($this->triggers[$i][2], $line, $result);
             if ($result) {
                 $group = array(
@@ -63,7 +63,7 @@ class Maat
         return array(false, false);
     }
 
-    private function load_extension(string $file): bool
+    private function load_extension(string $file) : bool
     {
         $name = basename($file, ".php");
         $MaatExtensionClass = 'MaatExtension_' . $name;
@@ -71,14 +71,14 @@ class Maat
         $this->extensions[$name] = new $MaatExtensionClass($this);
         return true;
     }
-    public function define_trigger(string $extension, string $class, string $regex, bool $formatting): bool
+    public function define_trigger(string $extension, string $class, string $regex, bool $formatting) : bool
     {
         if (!in_array($extension, $this->config['banned-extensions'], true)) {
-            $this->triggers[] = array($extension, $class, '/^'.$regex.'/', $formatting);
+            $this->triggers[] = array($extension, $class, '/^' . $regex . '/', $formatting);
         }
         return true;
     }
-    public function render(string $text): string
+    public function render(string $text) : string
     {
         if (trim($text) === '') {
             return '';
@@ -90,20 +90,19 @@ class Maat
         $isHTML = false;
         $isCode = false;
         $line = '';
-        for ($i=0; $i < sizeof($lines); $i++) {
+        for ($i = 0; $i < sizeof($lines); $i++) {
             $trimedLine = trim($lines[$i]);
             switch ($trimedLine) {
                 case '<html>':
                     $isHTML = true;
-                    $line = $trimedLine."\n";
+                    $line = $trimedLine . "\n";
                     break;
                 case '<style>':
-                    if (!$isHTML){
+                    if (!$isHTML) {
                         $isHTML = true;
-                        $line = $trimedLine."\n";
-                    }
-                    else
-                        $line .= $trimedLine."\n";
+                        $line = $trimedLine . "\n";
+                    } else
+                        $line .= $trimedLine . "\n";
                     break;
                 case '<code>':
                     $isCode = true;
@@ -114,9 +113,9 @@ class Maat
                         $isHTML = false;
                     } elseif ($isCode) {
                         preg_match("/<code>(.*)<\/code>/s", $line, $quote);
-                            $code = htmlspecialchars($quote[1]);
-                            $code = str_replace('{', "&#123;", str_replace('}', "&#125;", $code));
-                            $line = $this->config['code-wrap'][0].$code.$this->config['code-wrap'][1];
+                        $code = htmlspecialchars($quote[1]);
+                        $code = str_replace('{', "&#123;", str_replace('}', "&#125;", $code));
+                        $line = $this->config['code-wrap'][0] . $code . $this->config['code-wrap'][1];
                         $isCode = false;
                     } else {
                         $lenght = strlen($line);
@@ -151,12 +150,12 @@ class Maat
                                             break;
                                         }
                                     }
-                                    $line = mb_substr($line, $k + 1, $lenght-$k);
+                                    $line = mb_substr($line, $k + 1, $lenght - $k);
                                 }
                                 if ($class !== '') {
-                                    $line = '<p class="'.$class.'">'.$line.'</p>';
+                                    $line = '<p class="' . $class . '">' . $line . '</p>';
                                 } else {
-                                    $line = '<p>'.$line.'</p>';
+                                    $line = '<p>' . $line . '</p>';
                                 }
                             }
                         }
@@ -168,14 +167,14 @@ class Maat
                     break;
                 default:
                     if ($isHTML) {
-                        $line .= $trimedLine."\n";
+                        $line .= $trimedLine . "\n";
                     } elseif ($isCode) {
                         $line .= $lines[$i] . "\n";
                     } else {
                         if ($line === '') {
                             $line .= $trimedLine;
                         } else {
-                            $line .= '<br>'.$trimedLine;
+                            $line .= '<br>' . $trimedLine;
                         }
                     }
                     break;

@@ -1,5 +1,5 @@
 <?php
-class MaatExtension_socialnetworks implements MaatExtension
+class MaatExtension_socialnetworks implements Maat\Extension
 {
     private $maat;
     function __construct($maat)
@@ -12,16 +12,16 @@ class MaatExtension_socialnetworks implements MaatExtension
             false
         );
     }
-    function render(array $group): string
+    function render(array $group) : string
     {
         $post = 'Твит';
         switch ($group['class']) {
             case 'twitter':
-                $json = json_decode(file_get_contents('https://publish.twitter.com/oembed?url='.$group['class-data'][0]), true);
+                $json = json_decode(file_get_contents('https://publish.twitter.com/oembed?url=' . $group['class-data'][0]), true);
                 $post = $json['html'];
                 break;
             case 'vimeo':
-                $src = 'https://player.vimeo.com/video/'.$group['class-data'][1];
+                $src = 'https://player.vimeo.com/video/' . $group['class-data'][1];
                 break;
         }
         return $post;

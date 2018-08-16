@@ -1,5 +1,5 @@
 <?php
-class MaatExtension_onlinevideo implements MaatExtension
+class MaatExtension_onlinevideo implements Maat\Extension
 {
     private $maat;
     function __construct($maat)
@@ -18,23 +18,23 @@ class MaatExtension_onlinevideo implements MaatExtension
             false
         );
     }
-    function render(array $group): string
+    function render(array $group) : string
     {
         switch ($group['class']) {
             case 'youtube':
-                $src = 'https://www.youtube.com/embed/'.$group['class-data'][1];
+                $src = 'https://www.youtube.com/embed/' . $group['class-data'][1];
                 break;
             case 'vimeo':
-                $src = 'https://player.vimeo.com/video/'.$group['class-data'][1];
+                $src = 'https://player.vimeo.com/video/' . $group['class-data'][1];
                 break;
         }
-        $video = '<iframe src="'.$src.'"'.
-                 'width="854" height="480" frameborder="0" allowfullscreen>'.
-                 '</iframe>';
-        if (! $this->maat->config['basic-html']) {
-            $video = '<div class="'.$group['config']['container-class'].'">'.
-                         '<div class="'.$group['config']['wrapper-class'].'">'.$video.'</div>'.
-                     '</div>';
+        $video = '<iframe src="' . $src . '"' .
+            'width="854" height="480" frameborder="0" allowfullscreen>' .
+            '</iframe>';
+        if (!$this->maat->config['basic-html']) {
+            $video = '<div class="' . $group['config']['container-class'] . '">' .
+                '<div class="' . $group['config']['wrapper-class'] . '">' . $video . '</div>' .
+                '</div>';
         }
         return $video;
     }
